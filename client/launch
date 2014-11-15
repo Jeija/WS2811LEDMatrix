@@ -1,0 +1,33 @@
+#!/bin/bash
+
+CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+animdir=$CWD/animations/
+ANIMATION=""
+if [ -z $1 ] || [ ! -f $animdir/$1.py ]; then
+	if [ -n $animdir/$1.py ]; then
+		echo "Error: $1.py was not found."
+	fi
+
+	echo "Following animations are available:"
+	for f in $(find $animdir -name "*.py"); do
+		filename=${f#$animdir}
+		anname="${filename%.*}"
+		echo "> $anname";
+	done
+
+	if [ -z $1 ]; then
+		echo
+		echo "In order to launch an animation, type"
+		echo "./animate ANIMATION [ARGUMENTS]"
+		echo "If supplied, any [ARGUMENTS] will be passed on to the animation script"
+	fi
+	exit 0
+else
+	ANIMATION=$1
+fi
+
+
+shift
+export PYTHONPATH=$PYTHONPATH:$CWD/lib
+(cd $CWD; python3 $animdir/$ANIMATION.py $@)
