@@ -71,9 +71,6 @@ class Matrix:
 
 	def outputLoop(self):
 		while not self.ready: pass
-		# Input socket
-		self.sin = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		self.sin.bind(("", MXP_PORT))
 
 		# Write socket
 		self.sout = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
