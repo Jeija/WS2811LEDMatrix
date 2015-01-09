@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Configuration:
-PERIODSIZE = 3000
+PERIODSIZE = 100
 SAMPLINGRATE = 44100
 
 import threading

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 # Configuration
-NETIO_IP = "192.168.0.90"
-MXP_PORT = 1337
+NETIO_IP = "192.168.0.91"
+MXP_PORT = 2711
 SEND_PER_PACKET = 100
 LOOKUP_FILENAME = "config/lookup.csv"
 EMULATE = True
@@ -97,7 +97,7 @@ class Matrix:
 
 				# Send frame packet
 				self.sout.sendto(msg, (NETIO_IP, MXP_PORT))
-				time.sleep(0.01)
+				time.sleep(0.02)
 
 	def setPixel(self, x, y, color):
 		if (EMULATE): self.mtx_em.setPixel(x, y, color)
