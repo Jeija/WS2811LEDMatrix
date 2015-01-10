@@ -1,4 +1,4 @@
-# WS2811 LED Matrix with ATMega16 and Pyhton Client
+# WS2811 LED Matrix with ATMega16 and Python Client
 Our setup consists of the following:
 * 4 LED matrix panels at the size of 0.5m * 0.5m and 10x10 pixels. That makes for 20x20 pixels and 1m x 1m display area in total. Also includes 8x 3A-PSUs at 5V to provide the total required maximum 120W. The panel uses [fairly cheap LED pixels from china](http://www.aliexpress.com/item/Diameter-12mm-500pcs-WS2811-LED-pixel-module-IP68-waterproof-DC5V-full-color-christmas-tree-decration/1234045959.html).
 * A controller PCB that translates frames sent to it from the client over LAN to signals for the LED matrix using simple bit-banging
@@ -23,7 +23,7 @@ You can either just flash the prebuilt firmware in `firmware/build/main.hex` ont
 ... or edit these values and flash your own firmware, from within `firmware`, execute:
 * `make` to compile the firmware
 * `make flash` to flash the firmware to the microcontroller, make sure to adjust your programmer settings in the Makefile
-* `make clean` to remove unneccesary files
+* `make clean` to remove unnecessary files
 
 You should then be able to `ping` and `arping` your board when connected to the LAN.
 
