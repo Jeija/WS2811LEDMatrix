@@ -1,0 +1,13 @@
+{
+  "name": "WS2811LEDMatrix",
+  "version": "0.0.1",
+  "description": "Node.js client for WS2811 LED matrices",
+  "main": "sample.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jeija/WS2811LEDMatrix.git"
+  },
+  "dependencies": {
+    "csv-load-sync": "0.0.3"
+  }
+}
