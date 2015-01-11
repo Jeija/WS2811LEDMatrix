@@ -1,4 +1,4 @@
-# WS2811 LED Matrix with ATMega16 and Python Client
+# WS2811 LED Matrix with ATMega16, Python and node.js Client
 Our setup consists of the following:
 * 4 LED matrix panels at the size of 0.5m * 0.5m and 10x10 pixels. That makes for 20x20 pixels and 1m x 1m display area in total. Also includes 8x 3A-PSUs at 5V to provide the total required maximum 120W. The panel uses [fairly cheap LED pixels from china](http://www.aliexpress.com/item/Diameter-12mm-500pcs-WS2811-LED-pixel-module-IP68-waterproof-DC5V-full-color-christmas-tree-decration/1234045959.html).
 * A controller PCB that translates frames sent to it from the client over LAN to signals for the LED matrix using simple bit-banging
@@ -28,7 +28,13 @@ You can either just flash the prebuilt firmware in `firmware/build/main.hex` ont
 You should then be able to `ping` and `arping` your board when connected to the LAN.
 
 ## Run the Client / Emulator
-The LED Matrix Emulator displays a live image of the LED Matrix in a window on a regular screen.In order to run the Emulator, execute `launch` in the client directory. `launch` will then give a list of installed animations and instructions on how to execute them.
+### node.js client
+Currently, the node.js client is a rather minimal implementation of a client, without any GUI or emulator.
+* Install dependencies: You need to have node.js and `npm` installed on your system. Go to the `client/nodejs/` and execute `npm install` to install all dependencies.
+* You can run the node.js sample by executing `client/nodejs/sample.js`. In the `client/nodejs/` directory, type `node sample.js`.
+
+### Python client with Emulator
+The LED Matrix Emulator displays a live image of the LED Matrix in a window on a regular screen. In order to run the Emulator, execute `launch` in the client/python directory. `launch` will then give a list of installed animations and instructions on how to execute them.
 
 Depending on the animation,you may need to install the following dependencies:
 * Python3 (mandatory)
@@ -36,4 +42,3 @@ Depending on the animation,you may need to install the following dependencies:
 * PIL (for animations that display images)
 * python-noise (for noise animations)
 * Numpy and alsaaudio (for animations including sound analysis)
-
