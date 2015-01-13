@@ -40,14 +40,14 @@ function Matrix(ip, port, lookup_file) {
 	
 	// Open socket and output framebuffer regularly
 	this.socket = dgram.createSocket("udp4");
-	setInterval(this.output.bind(this), 20);
+	setInterval(this.output.bind(this), 10);
 }
 
 /**
  * Prototype for writing the framebuffer to the LED matrix by sending a UDP
  * MatrixProtocol data packet, called in a regular interval
  */
-Matrix.prototype.output = function() {
+Matrix.prototype.output = function () {
 	// Generate raw pixeldata buffer from framebuffer
 	var pixeldata = new Buffer(this.width * this.height * 3);
 	pixeldata.fill();
@@ -73,18 +73,20 @@ Matrix.prototype.output = function() {
 
 /**
  * Set pixel in LED Matrix to given color
- * x:		X-offset for pixel on matrix
- * y:		Y-offset for pixel on matrix
+ * x:		X-offset for pixel on matrix | If x or y values are larger than the matrix size
+ * y:		Y-offset for pixel on matrix | or negative, setPixel returns false, otherwise true
  * color:	An object of {red = <val>, green = <val>, blue = <val>}
  */
-Matrix.prototype.setPixel = function(x, y, color) {
+Matrix.prototype.setPixel = function (x, y, color) {
+	if (this.width <= x || this.height <= y || x < 0 || y < 0) return false;
 	this.fb.back[x][y] = color;
+	return true;
 };
 
 /**
  * Clear backbuffer, set all pixels to black
  */
-Matrix.prototype.clear = function() {
+Matrix.prototype.clear = function () {
 	for (var x = 0; x < this.width; x++) {
 		for (var y = 0; y < this.width; y++) {
 			this.setPixel(x, y, {red : 0, green : 0, blue : 0});
@@ -95,7 +97,7 @@ Matrix.prototype.clear = function() {
 /**
  * Set backbuffer as new frontbuffer to render
  */
-Matrix.prototype.flip = function() {
+Matrix.prototype.flip = function () {
 	for (var x = 0; x < this.width; x++) {
 		for (var y = 0; y < this.width; y++) {
 			if (this.fb.back[x][y]) {
@@ -107,6 +109,6 @@ Matrix.prototype.flip = function() {
 			}
 		}
 	}
-}
+};
 
 module.exports = Matrix;
