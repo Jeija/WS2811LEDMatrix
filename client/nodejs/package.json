@@ -8,6 +8,7 @@
     "url": "https://github.com/Jeija/WS2811LEDMatrix.git"
   },
   "dependencies": {
-    "csv-load-sync": "0.0.3"
+    "csv-load-sync": "0.0.3",
+    "socket.io": "^1.2.1"
   }
 }
