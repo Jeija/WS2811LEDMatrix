@@ -72,12 +72,54 @@ MultiMatrix.prototype.flip = function () {
 };
 
 /**
+ * Fill backbuffer, set all pixels to the given color for all matrices
+ * color:	The color to set for all matrices' pixels
+ */
+MultiMatrix.prototype.fill = function (color) {
+	for (var name in this.matrices) {
+		this.matrices[name].fill(color);
+	}
+};
+
+/**
  * Clear backbuffer, set all pixels to black for all matrices
  */
 MultiMatrix.prototype.clear = function () {
 	for (var name in this.matrices) {
 		this.matrices[name].clear();
 	}
+};
+
+/**
+ * Returns mxp.js/Matrix instance by its name
+ * name:	Name of LED Matrix as registered with new MultiMatrix()
+ */
+MultiMatrix.prototype.getMatrix = function (name) {
+	return this.matrices[name];
+};
+
+/**
+ * Returns total width of whole global environment
+ */
+MultiMatrix.prototype.getWidth = function () {
+	var max_width = null;
+	for (var name in this.matrices) {
+		var matrixw = this.matrices_definition[name].xoffset + this.matrices[name].getWidth();
+		if (max_width === null || matrixw > max_width) max_width = matrixw;
+	}
+	return max_width;
+};
+
+/**
+ * Returns total height of whole global environment
+ */
+MultiMatrix.prototype.getHeight = function () {
+	var max_height = null;
+	for (var name in this.matrices) {
+		var matrixh = this.matrices_definition[name].yoffset + this.matrices[name].getHeight();
+		if (max_height === null || matrixh > max_height) max_height = matrixh;
+	}
+	return max_height;
 };
 
 module.exports = MultiMatrix;

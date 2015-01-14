@@ -84,14 +84,22 @@ Matrix.prototype.setPixel = function (x, y, color) {
 };
 
 /**
+ * Fill backbuffer, set all pixels to given color
+ * color:	The color to set for all pixels
+ */
+Matrix.prototype.fill = function (color) {
+	for (var x = 0; x < this.width; x++) {
+		for (var y = 0; y < this.width; y++) {
+			this.setPixel(x, y, color);
+		}
+	}
+};
+
+/**
  * Clear backbuffer, set all pixels to black
  */
 Matrix.prototype.clear = function () {
-	for (var x = 0; x < this.width; x++) {
-		for (var y = 0; y < this.width; y++) {
-			this.setPixel(x, y, {red : 0, green : 0, blue : 0});
-		}
-	}
+	this.fill({red : 0, green : 0, blue : 0});
 };
 
 /**
@@ -109,6 +117,20 @@ Matrix.prototype.flip = function () {
 			}
 		}
 	}
+};
+
+/**
+ * Returns width of LED Matrix (derived from lookup table)
+ */
+Matrix.prototype.getWidth = function () {
+	return this.width;
+};
+
+/**
+ * Returns height of LED Matrix (derived from lookup table)
+ */
+Matrix.prototype.getHeight = function () {
+	return this.height;
 };
 
 module.exports = Matrix;

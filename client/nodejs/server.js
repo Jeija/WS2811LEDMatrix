@@ -1,9 +1,16 @@
+// Load Express, socket.io and other external modules
 var express = require("express");
 var app = express();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 var path = require("path");
+
+// Load MultiMatrix and animations internal modules
+var AnimationManager = require("./animations");
 var MultiMatrix = require("./multimatrix");
+
+// Config
+FPS = 50;
 
 var matrix = new MultiMatrix({
 	left : {
@@ -22,29 +29,23 @@ var matrix = new MultiMatrix({
 	}
 });
 
-app.use(express.static(__dirname + '/site'));
+var anim = AnimationManager(matrix);
+
+anim.setAnimation("sky", {});
+setInterval(function () {
+	anim.draw();
+}, 1000 / FPS);
+
+app.use(express.static(__dirname + "/site"));
 app.get("/", function (req, res){
 	res.sendFile(path.join(__dirname, "site/livecontrol.html"));
 });
 
-var beat = 0;
-
 io.on("connection", function (socket) {
-	socket.on("beat", function () {
-		beat = 10;
+	socket.on("event", function (type) {
+		anim.event(type);
 	});
 });
-
-setInterval(function () {
-	for (var x = 0; x < 10; x++) {
-		for (var y = 0; y < 10; y++) {
-			matrix.setPixelAll(x, y, { red : beat * 26 , green : beat *26, blue : beat * 26});
-		}
-	}
-	matrix.flip();
-	if (beat > 0) beat -= 0.3;
-	if (beat < 0) beat = 0;
-}, 10);
 
 http.listen(8080, function () {
 	console.log("Server started!");
