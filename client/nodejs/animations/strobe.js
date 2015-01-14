@@ -25,7 +25,11 @@ function init (matrix, settings) {
 }
 
 function draw (matrix) {
-	matrix.fill({ red : beat * 255, green : beat * 255, blue : beat * 255 });
+	matrix.fill({
+		red : beat * color.red,
+		green : beat * color.green,
+		blue : beat * color.blue
+	});
 }
 
 function event (ev) {

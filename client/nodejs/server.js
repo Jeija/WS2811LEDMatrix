@@ -31,7 +31,7 @@ var matrix = new MultiMatrix({
 
 var anim = AnimationManager(matrix);
 
-anim.setAnimation("sky", {});
+anim.setAnimation("strobe", { color : "blue" });
 setInterval(function () {
 	anim.draw();
 }, 1000 / FPS);
