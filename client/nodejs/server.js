@@ -30,8 +30,6 @@ var matrix = new MultiMatrix({
 });
 
 var anim = AnimationManager(matrix);
-
-anim.setAnimation("strobe", { color : "blue" });
 setInterval(function () {
 	anim.draw();
 }, 1000 / FPS);
@@ -41,9 +39,22 @@ app.get("/", function (req, res){
 	res.sendFile(path.join(__dirname, "site/livecontrol.html"));
 });
 
+app.get("/queue", function (req, res){
+	res.sendFile(path.join(__dirname, "site/queue.html"));
+});
+
 io.on("connection", function (socket) {
 	socket.on("event", function (type) {
 		anim.event(type);
+	});
+
+	socket.on("get_animations", function (_, fn) {
+		fn(anim.getAnimations());
+	});
+
+	socket.on("set_animation", function (req, fn) {
+		anim.setAnimation(req.animation, req.settings);
+		//fn("ok");
 	});
 });
 

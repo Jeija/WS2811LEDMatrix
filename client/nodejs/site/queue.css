@@ -1,0 +1,40 @@
+body {
+	background:#000;
+	color:#fff;
+}
+
+select {
+	border:none;
+	padding:5px 10px;
+	background:#444;
+	font-size:16px;
+	color:#fff;
+	cursor:pointer;
+}
+
+table {
+	border-collapse:collapse;
+}
+
+td {
+	padding:5px 12px;
+	border:1px solid #aaa;
+}
+
+#settings_header {
+	margin-top:12px;
+	font-size:30px;
+}
+
+input[type="button"] {
+	margin-top:10px;
+	border:1px solid #fff;
+	background:#000;
+	color:#fff;
+	font-size:16px;
+	padding:5px 10px;
+	cursor:pointer;
+}
+
+input[type="button"]:hover { background:#222; }
+input[type="button"]:active { background:#444; }

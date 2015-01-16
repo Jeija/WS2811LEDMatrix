@@ -15,8 +15,8 @@
 #define LED_NUM 100
 
 // Network Configuration
-uint8_t mac[6] = {0x4c, 0x45, 0x4d, 0x41, 0x54, 0x52};
-uint8_t ip[4] = {192, 168, 0, 91};
+uint8_t mac[6] = {0x4c, 0x45, 0x4d, 0x48, 0x51, 0x12};
+uint8_t ip[4] = {192, 168, 0, 80};
 
 #if F_CPU != 16000000
 #error "F_CPU must be 16000000 as the timing is adapted to a 16MHz crystal"

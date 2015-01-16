@@ -38,6 +38,7 @@ function event (ev) {
 
 setInterval(function () {
 	if (beat > 0.02) beat -= 0.02;
+	else beat = 0;
 }, 10);
 
 module.exports = {
