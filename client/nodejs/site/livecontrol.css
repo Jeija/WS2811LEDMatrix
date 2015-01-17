@@ -1,0 +1,16 @@
+body {
+	margin:0;
+	padding:0;
+	background:#000;
+	color:#fff;
+}
+
+h1 {
+	text-align:center;
+}
+
+#preview {
+	height:85vh;
+	width:85vw;
+	margin-left:10vw;
+}

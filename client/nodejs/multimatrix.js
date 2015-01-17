@@ -21,6 +21,19 @@ function MultiMatrix(matrices_definition) {
 		var mtx = matrices_definition[name];
 		this.matrices[name] = new mxp(mtx.ip, mtx.port, mtx.lookup_file);
 	}
+
+	// Update width and height attributes based on clients
+	this.width = null;
+	for (var name in this.matrices) {
+		var matrixw = this.matrices_definition[name].xoffset + this.matrices[name].getWidth();
+		if (this.width === null || matrixw > this.width) this.width = matrixw;
+	}
+
+	this.height = null;
+	for (var name in this.matrices) {
+		var matrixh = this.matrices_definition[name].yoffset + this.matrices[name].getHeight();
+		if (this.height === null || matrixh > this.height) this.height = matrixh;
+	}
 }
 
 /**
@@ -102,24 +115,35 @@ MultiMatrix.prototype.getMatrix = function (name) {
  * Returns total width of whole global environment
  */
 MultiMatrix.prototype.getWidth = function () {
-	var max_width = null;
-	for (var name in this.matrices) {
-		var matrixw = this.matrices_definition[name].xoffset + this.matrices[name].getWidth();
-		if (max_width === null || matrixw > max_width) max_width = matrixw;
-	}
-	return max_width;
+	return this.width;
 };
 
 /**
  * Returns total height of whole global environment
  */
 MultiMatrix.prototype.getHeight = function () {
-	var max_height = null;
+	return this.height;
+};
+
+/**
+ * Returns combined front framebuffers of all registered matrices
+ */
+MultiMatrix.prototype.getFrameBuffer = function () {
+	var fb = new Array(this.width);
+	for (var i = 0; i <= this.width; i++) fb[i] = new Array(this.height);
+
 	for (var name in this.matrices) {
-		var matrixh = this.matrices_definition[name].yoffset + this.matrices[name].getHeight();
-		if (max_height === null || matrixh > max_height) max_height = matrixh;
+		var xoffset = this.matrices_definition[name].xoffset;
+		var yoffset = this.matrices_definition[name].yoffset;
+		var matrixfb = this.matrices[name].getFrameBuffer();
+		for (var x = 0; x < matrixfb.length; x++) {
+			for (var y = 0; y < matrixfb[x].length; y++) {
+				fb[x+xoffset][y+yoffset] = matrixfb[x][y];
+			}
+		}
 	}
-	return max_height;
+
+	return fb;
 };
 
 module.exports = MultiMatrix;

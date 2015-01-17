@@ -133,4 +133,11 @@ Matrix.prototype.getHeight = function () {
 	return this.height;
 };
 
+/**
+ * Returns (front) framebuffer of LED Matrix (can be used for previews)
+ */
+Matrix.prototype.getFrameBuffer = function () {
+	return this.fb.front;
+};
+
 module.exports = Matrix;

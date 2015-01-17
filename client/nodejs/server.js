@@ -65,7 +65,10 @@ io.on("connection", function (socket) {
 			anim.setAnimation(na.animation, na.settings);
 			io.sockets.emit("sync_queue", animqueue);
 		}
-		
+	});
+
+	socket.on("get_preview", function (_, fn) {
+		fn(matrix.getFrameBuffer());
 	});
 });
 
