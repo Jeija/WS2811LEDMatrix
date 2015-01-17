@@ -8,10 +8,17 @@
 	<link rel="stylesheet" type="text/css" href="queue.css">
 </head>
 <body>
-	<select id="nextanim"></select>
-
-	<div id="settings_header">Settings</div>
-	<table id="settings"></table>
-	<input type="button" id="setanimation" value="Execute">
+	<div id="content">
+		<div id="config">
+			<select id="nextanim"></select>
+			<div class="header">Settings</div>
+			<table id="settings"></table>
+			<input type="button" id="addanimation" value="Add to Queue">
+		</div>
+		<div id="queue">
+			<div class="header">Queue</div>
+			<table id="queuelist"></table>
+		</div>
+	</div>
 </body>
 </html>

@@ -29,6 +29,7 @@ var matrix = new MultiMatrix({
 	}
 });
 
+var animqueue = [];
 var anim = AnimationManager(matrix);
 setInterval(function () {
 	anim.draw();
@@ -50,11 +51,21 @@ io.on("connection", function (socket) {
 
 	socket.on("get_animations", function (_, fn) {
 		fn(anim.getAnimations());
+		socket.emit("sync_queue", animqueue);
 	});
 
-	socket.on("set_animation", function (req, fn) {
-		anim.setAnimation(req.animation, req.settings);
-		//fn("ok");
+	socket.on("sync_queue", function (queue) {
+		animqueue = queue;
+		socket.broadcast.emit("sync_queue", animqueue);
+	});
+
+	socket.on("next_animation", function (queue) {
+		if (animqueue.length > 0) {
+			var na = animqueue.shift();
+			anim.setAnimation(na.animation, na.settings);
+			io.sockets.emit("sync_queue", animqueue);
+		}
+		
 	});
 });
 
