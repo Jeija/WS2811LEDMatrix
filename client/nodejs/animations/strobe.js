@@ -53,6 +53,7 @@ module.exports = {
 		init : init,
 		draw : draw,
 		event : event,
-		terminate : terminate
+		terminate : terminate,
+		description : "Glows bright on beat and decays. No special keys."
 	}
-}
+};

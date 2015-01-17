@@ -10,7 +10,26 @@ h1 {
 }
 
 #preview {
+	position:absolute;
 	height:85vh;
-	width:85vw;
-	margin-left:10vw;
+	width:62vw;
+	left:5vw;
+	top:80px;
+}
+
+#info {
+	position:absolute;
+	width:25vw;
+	right:5vw;
+	top:80px;
+	height:85vh;
+	border:1px solid #0a0;
+}
+
+#info_padding {
+	padding:10px;
+}
+
+#next_container, #active_container {
+	font-size:2vw;
 }

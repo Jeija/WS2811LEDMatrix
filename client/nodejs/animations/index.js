@@ -22,6 +22,10 @@ module.exports = function (matrix) {
 			animations[animation_active].init(matrix, settings);
 		},
 
+		getActiveName : function () {
+			return animation_active;
+		},
+
 		getAnimations : function () {
 			return animations;
 		},

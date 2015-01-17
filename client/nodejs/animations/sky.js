@@ -45,6 +45,7 @@ module.exports = {
 		init : init,
 		draw : draw,
 		event : event,
-		terminate : terminate
+		terminate : terminate,
+		description : "Simplex Noise, no special keys. Moves faster on beat."
 	}
-}
+};

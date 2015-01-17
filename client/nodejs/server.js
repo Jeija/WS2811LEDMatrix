@@ -70,6 +70,10 @@ io.on("connection", function (socket) {
 	socket.on("get_preview", function (_, fn) {
 		fn(matrix.getFrameBuffer());
 	});
+
+	socket.on("get_current_animation", function (_, fn) {
+		fn(anim.getActiveName());
+	});
 });
 
 http.listen(8080, function () {

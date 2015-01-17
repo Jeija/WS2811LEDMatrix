@@ -1,6 +1,18 @@
 var socket = io();
+var animations = {};
 
 $(function() {
+	// Update next animation whenever it changes
+	socket.on("sync_queue", function (queue) {
+		if (!queue[0]) return;
+		$("#next").text(animations[queue[0].animation].name);
+	});
+
+	socket.emit("get_animations", null, function (res) {
+		animations = res;
+	});
+
+	// Prepare preview rendering
 	var preview = $("#preview")[0].getContext("2d");
 	var preview_w = $("#preview").width();
 	var preview_h = $("#preview").height();
@@ -17,16 +29,6 @@ $(function() {
 	preview.fillStyle = "#000";
 	preview.fillRect(0, 0, preview_w, preview_h);
 
-	$(document).keypress(function(e) {
-		if (e.key == "n") {
-			socket.emit("next_animation");
-		}
-
-		if (e.key == "a" || e.key == "s" || e.key == "d" || e.key == "f") {
-			socket.emit("event", "beat");
-		}
-	});
-
 	// Refresh live preview
 	setInterval(function () {
 		socket.emit("get_preview", null, function (fb) {
@@ -35,7 +37,7 @@ $(function() {
 
 			var size = Math.floor(preview_w / totalx);
 			if (preview_h / totaly < size)
-				var size = Math.floor(preview_h / totaly);
+				size = Math.floor(preview_h / totaly);
 
 			// Calculate alignment offset
 			var xalign = (preview_w - size * totalx) / 2;
@@ -55,6 +57,27 @@ $(function() {
 				var yoffs = Math.floor(y * size + yalign);
 				preview.fillRect(xoffs, yoffs, size - 1, size - 1);
 			}}
+
+			// Update current animation + description
+			socket.emit("get_current_animation", null, function (name) {
+				$("#active").text("");
+				$("#description").text("");
+				if (!animations[name]) return;
+				$("#active").text(animations[name].name);
+				$("#description").text(animations[name].description);
+			});
 		});
 	}, 20);
+
+	// Send animation events, such as rhythm
+	$(document).keypress(function(e) {
+		if (e.key == "n") {
+			socket.emit("next_animation");
+			update_next_anim();
+		}
+
+		if (e.key == "a" || e.key == "s" || e.key == "d" || e.key == "f") {
+			socket.emit("event", "beat");
+		}
+	});
 });
