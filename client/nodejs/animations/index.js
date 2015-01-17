@@ -16,6 +16,7 @@ fs.readdirSync(__dirname).forEach(function (fn) {
 module.exports = function (matrix) {
 	return {
 		setAnimation : function (name, settings) {
+			if (animation_active) animations[animation_active].terminate();
 			animation_active = name;
 			if (!animation_active) return false;
 			animations[animation_active].init(matrix, settings);

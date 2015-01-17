@@ -1,5 +1,4 @@
-var color;
-var beat;
+var color, beat, interval;
 
 function init (matrix, settings) {
 	switch (settings.color) {
@@ -22,6 +21,11 @@ function init (matrix, settings) {
 		default:
 			color = { red : 0, green : 0, blue : 0 };
 	}
+
+	interval = setInterval(function () {
+		if (beat > 0.02) beat -= 0.02;
+		else beat = 0;
+	}, 10);
 }
 
 function draw (matrix) {
@@ -36,10 +40,9 @@ function event (ev) {
 	if (ev == "beat") beat = 1;
 }
 
-setInterval(function () {
-	if (beat > 0.02) beat -= 0.02;
-	else beat = 0;
-}, 10);
+function terminate () {
+	clearInterval(interval);
+}
 
 module.exports = {
 	strobe : {
@@ -49,6 +52,7 @@ module.exports = {
 		},
 		init : init,
 		draw : draw,
-		event : event
+		event : event,
+		terminate : terminate
 	}
 }

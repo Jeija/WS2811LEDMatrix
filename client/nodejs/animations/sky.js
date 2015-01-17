@@ -1,7 +1,7 @@
 var SimplexNoise = require("simplex-noise");
 var simplex = new SimplexNoise();
 
-var t, ofs, beat, globalWidth, globalHeight;
+var t, ofs, beat, globalWidth, globalHeight, interval;
 
 function init (matrix, settings) {
 	t = 0;
@@ -9,6 +9,12 @@ function init (matrix, settings) {
 	beat = 0;
 	globalWidth = matrix.getWidth();
 	globalHeight = matrix.getHeight();
+
+	interval = setInterval(function () {
+		t++;
+		ofs += beat / 20;
+		if (beat > 0.05) beat -= 0.05;
+	}, 10);
 }
 
 function draw (matrix) {
@@ -28,11 +34,9 @@ function event (ev) {
 	if (ev == "beat") beat = 1;
 }
 
-setInterval(function () {
-	t++;
-	ofs += beat / 20;
-	if (beat > 0.05) beat -= 0.05;
-}, 10);
+function terminate () {
+	clearInterval(interval);
+}
 
 module.exports = {
 	sky : {
@@ -40,6 +44,7 @@ module.exports = {
 		settings : {},
 		init : init,
 		draw : draw,
-		event : event
+		event : event,
+		terminate : terminate
 	}
 }
