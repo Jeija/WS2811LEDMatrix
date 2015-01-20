@@ -1,4 +1,4 @@
-var color, beat, interval;
+var color, beat, interval, decay;
 
 function init (matrix, settings) {
 	switch (settings.color) {
@@ -22,8 +22,29 @@ function init (matrix, settings) {
 			color = { red : 0, green : 0, blue : 0 };
 	}
 
+	switch (settings.decay) {
+		case "ultrafast":
+			decay = 0.1;
+			break;
+
+		case "fast":
+			decay = 0.05;
+			break;
+
+		case "normal":
+			decay = 0.03;
+			break;
+
+		case "slow":
+			decay = 0.015;
+			break;
+
+		default:
+			decay = 0.03;
+	}
+
 	interval = setInterval(function () {
-		if (beat > 0.02) beat -= 0.02;
+		if (beat > decay) beat -= decay;
 		else beat = 0;
 	}, 10);
 }
@@ -48,7 +69,8 @@ module.exports = {
 	strobe : {
 		name : "Strobo",
 		settings : {
-			color : [ "white", "red", "green", "blue" ]
+			color : [ "white", "red", "green", "blue" ],
+			decay : [ "ultrafast", "fast", "normal", "slow" ]
 		},
 		init : init,
 		draw : draw,
