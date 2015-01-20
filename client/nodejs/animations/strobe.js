@@ -1,26 +1,8 @@
+var parseColor = require("./parsecolor");
 var color, beat, interval, decay;
 
 function init (matrix, settings) {
-	switch (settings.color) {
-		case "white":
-			color = { red : 255, green : 255, blue : 255 };
-			break;
-
-		case "red":
-			color = { red : 255 };
-			break;
-
-		case "green":
-			color = { green : 255 };
-			break;
-
-		case "blue":
-			color = { blue : 255 };
-			break;
-
-		default:
-			color = { red : 0, green : 0, blue : 0 };
-	}
+	color = parseColor(settings.color);
 
 	switch (settings.decay) {
 		case "ultrafast":
