@@ -10,6 +10,7 @@
   "dependencies": {
     "csv-load-sync": "0.0.3",
     "express": "^4.11.0",
+    "frequencyjs": "0.0.3",
     "simplex-noise": "^2.1.1",
     "socket.io": "^1.2.1"
   }
