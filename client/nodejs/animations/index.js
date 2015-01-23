@@ -36,9 +36,9 @@ module.exports = function (matrix) {
 			matrix.flip();
 		},
 
-		event : function (ev) {
+		event : function (ev, data) {
 			if (!animation_active) return false;
-			animations[animation_active].event(ev);
+			animations[animation_active].event(ev, data);
 		}
 	};
 };

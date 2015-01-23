@@ -45,8 +45,8 @@ app.get("/queue", function (req, res){
 });
 
 io.on("connection", function (socket) {
-	socket.on("event", function (type) {
-		anim.event(type);
+	socket.on("event", function (ev) {
+		anim.event(ev.type, ev.data);
 	});
 
 	socket.on("get_animations", function (_, fn) {

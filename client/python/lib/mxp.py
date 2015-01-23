@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Configuration
-NETIO_IP = "192.168.0.91"
+NETIO_IP = "192.168.0.80"
 MXP_PORT = 2711
 SEND_PER_PACKET = 100
 LOOKUP_FILENAME = "config/lookup.csv"

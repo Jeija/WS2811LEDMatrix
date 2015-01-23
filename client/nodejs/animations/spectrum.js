@@ -69,7 +69,7 @@ function draw (matrix) {
 	drawbar(matrix, 9, freqSum(spectrum, 1300, 1600), color);
 }
 
-function event (ev) {
+function event (ev, data) {
 }
 
 function terminate () {
