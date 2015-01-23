@@ -18,8 +18,8 @@ function init (matrix, settings) {
 }
 
 function draw (matrix) {
-	for (var x = 0; x < globalHeight; x++) {
-		for (var y = 0; y < globalWidth; y++) {
+	for (var x = 0; x < globalWidth; x++) {
+		for (var y = 0; y < globalHeight; y++) {
 			var noise = simplex.noise3D(ofs + x/8, ofs + y/8, t/200) * 127 + 128;
 			matrix.setPixelGlobal(x, y, {
 				blue : noise,

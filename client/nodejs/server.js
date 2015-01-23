@@ -13,20 +13,34 @@ var MultiMatrix = require("./multimatrix");
 FPS = 50;
 
 var matrix = new MultiMatrix({
-	left : {
-		ip : "192.168.0.91",
+	topLeft : {
+		ip : "192.168.0.90",
 		port : 2711,
 		lookup_file : "lookup.csv",
 		xoffset : 0,
 		yoffset : 0
 	},
-	right : {
-		ip : "192.168.0.80",
+	left : {
+		ip : "192.168.0.91",
 		port : 2711,
 		lookup_file : "lookup.csv",
 		xoffset : 10,
 		yoffset : 10
-	}
+	},
+	right : {
+		ip : "192.168.0.80",
+		port : 2711,
+		lookup_file : "lookup.csv",
+		xoffset : 20,
+		yoffset : 10
+	},
+	topRight : {
+		ip : "192.168.0.93",
+		port : 2711,
+		lookup_file : "lookup.csv",
+		xoffset : 30,
+		yoffset : 0
+	},
 });
 
 var animqueue = [];
