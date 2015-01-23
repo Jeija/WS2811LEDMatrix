@@ -6,13 +6,13 @@ var spawn = require("child_process").spawn;
 var parseColor = require("./parsecolor");
 var fjs = require("frequencyjs");
 
-var color, arecord, audioIn, spectrum = [], vol = 0;
+var color, interval, arecord, audioIn, spectrum = [], vol = 0, time = 0;
 
 function init (matrix, settings) {
 	arecord = spawn("arecord", ["--rate", "16000", "-f", "U8", "-F", "16000", "-"]);
 	audioIn = new require("stream").PassThrough();
 	arecord.stdout.pipe(audioIn);
-	color = parseColor(settings.color);
+	color = settings.color;
 
 	audioIn.on("data", function(data) {
 		var freqArray = [];
@@ -26,6 +26,10 @@ function init (matrix, settings) {
 
 		spectrum = fjs.Transform.toSpectrum(freqArray, {sampling : 16000, method : "fft"});
 	});
+
+	interval = setInterval(function () {
+		time += 0.1;
+	}, 100);
 }
 
 var lastbars = [];
@@ -36,8 +40,35 @@ function drawbar(matrix, x, height, color) {
 	lastbars[x] = lastbars[x] * OLD_PER_FRAME + height * NEW_PER_FRAME;
 	lastbars[x] -= DECAY_PER_FRAME;
 
+	// Determine bar color
+	var rgb;
+	if (color == "intensity1")
+		rgb = { red : lastbars[x] * 25.5, green : 255 - lastbars[x] * 25.5 };
+	else if (color == "intensity1_blue")
+		rgb = { red : lastbars[x] * 25.5, blue : 255 - lastbars[x] * 25.5 };
+	else if (color == "intensity1_cyan")
+		rgb = { red : lastbars[x] * 25.5, blue : 255 - lastbars[x] * 25.5,
+			green : 255 - lastbars[x] * 25.5 };
+	else if (color == "rainbowdash")
+	{
+		if (Math.round(x + time * 5) % 6 == 0) rgb = { red : 238, green :  20, blue :  20 };
+		if (Math.round(x + time * 5) % 6 == 1) rgb = { red : 250, green : 150, blue :  20 };
+		if (Math.round(x + time * 5) % 6 == 2) rgb = { red : 253, green : 246, blue : 100 };
+		if (Math.round(x + time * 5) % 6 == 3) rgb = { red :  50, green : 210, blue :  50 };
+		if (Math.round(x + time * 5) % 6 == 4) rgb = { red :  30, green : 152, blue : 211 };
+		if (Math.round(x + time * 5) % 6 == 5) rgb = { red : 110, green :  20, blue : 130 };
+	}
+	else if (color != "intensity2" && color != "intensity2_blue" && color != "intensity3")
+		rgb = parseColor(color);
+
 	for (var y = 0; y < lastbars[x] - 1; y++) {
-		matrix.setPixelAll(x, 9 - y, color);
+		if (color == "intensity2")
+			rgb = { red : y * 25.5, green : 255 - y * 25.5 };
+		else if (color == "intensity2_blue")
+			rgb = { red : y * 25.5, blue : 255 - y * 25.5 };
+		else if (color == "intensity3")
+			rgb = { red : y > 3 ? 255 : 0, green : y < 7 ? 255 : 0 };
+		matrix.setPixelAll(x, 9 - y, rgb);
 	}
 }
 
@@ -56,7 +87,11 @@ function freqSum(spectrum, lowerLimit, upperLimit) {
 
 function draw (matrix) {
 	matrix.clear();
-	var color = { green : 255 };
+
+	// Draw background color (if any)
+	if (color == "rainbowdash") {
+		matrix.fill({ red : 80, green :  80, blue : 180 });
+	}
 	drawbar(matrix, 0, freqSum(spectrum, 10, 70), color);
 	drawbar(matrix, 1, freqSum(spectrum, 70, 130), color);
 	drawbar(matrix, 2, freqSum(spectrum, 130, 200), color);
@@ -73,6 +108,7 @@ function event (ev, data) {
 }
 
 function terminate () {
+	clearInterval(interval);
 	arecord.kill();
 }
 
@@ -82,6 +118,11 @@ module.exports = {
 		init : init,
 		draw : draw,
 		event : event,
+		settings : {
+			color : ["white", "red", "green", "blue", "intensity1", "intensity1_blue",
+				"intensity1_cyan", "intensity2", "intensity2_blue", "intensity3",
+				"rainbowdash"]
+		},
 		terminate : terminate,
 		description : "Audio spectrum"
 	}
