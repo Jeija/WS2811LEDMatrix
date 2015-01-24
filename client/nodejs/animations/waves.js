@@ -1,7 +1,7 @@
 var parseColor = require("./parsecolor");
 var INTERVAL_TIME = 0.01;	// seconds
 
-var epicenter, time = 0, totalWidth, totalHeight, wavelength, wavespeed, color, colorspeed, beateffect, decay, beat;
+var epicenter, time = 0, totalWidth, totalHeight, wavelength, wavespeed, color, colorspeed, beateffect, decay, beat = 0;
 
 function init (matrix, settings) {
 	totalWidth = matrix.getWidth();
@@ -46,7 +46,10 @@ function init (matrix, settings) {
 	}
 
 	interval = setInterval(function () {
-		time = time + INTERVAL_TIME;
+		time += INTERVAL_TIME;
+		if (beateffect == "time") {
+			time += beat * 0.05;
+		}
 		if (beat > decay) beat -= decay;
 		else beat = 0;
 	}, INTERVAL_TIME * 1000);
@@ -58,8 +61,12 @@ function draw (matrix) {
 		for (var y = 0; y <= totalHeight; y++) {
 			var dx2 = (x - epicenter.x) * (x - epicenter.x);
 			var dy2 = (y - epicenter.y) * (y - epicenter.y);
-			var intensity = (Math.sin(Math.sqrt(dx2 + dy2) / wavelength * (2 * Math.PI)
-				- time * wavespeed) + 1);
+			var wlenOffset = 0;
+			if (beateffect == "wavelength") {
+				wlenOffset = -beat * 5;
+			}
+			var intensity = (Math.sin(Math.sqrt(dx2 + dy2) / (wavelength + wlenOffset)
+				* (2 * Math.PI) - time * wavespeed) + 1);
 
 			var rgb;
 			var distance = Math.sqrt(dx2 + dy2);
@@ -111,7 +118,7 @@ module.exports = {
 			wavespeed : [ "fast", "slow", "normal", "superfast", "ultrafast" ],
 			color : [ "white", "red", "green", "blue", "rainbowtime", "rainbow" ],
 			colorspeed : [ "ultraslow", "slow", "normal", "fast" ],
-			beateffect : [ "none", "brightness" ],
+			beateffect : [ "none", "brightness", "wavelength", "time" ],
 			decay : [ "fast", "ultrafast", "normal", "slow" ]
 		},
 		init : init,

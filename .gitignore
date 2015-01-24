@@ -4,5 +4,6 @@ __*
 !.gitignore
 *.out
 *.o
+*.pyc
 node_modules/
 bower_components/
