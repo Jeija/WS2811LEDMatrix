@@ -1,0 +1,8 @@
+*~
+__*
+.*
+!.gitignore
+*.out
+*.o
+node_modules/
+bower_components/
