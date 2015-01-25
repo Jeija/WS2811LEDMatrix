@@ -1,13 +1,17 @@
 var parseColor = require("./parsecolor");
 var totalWidth, totalHeight, axis, interval, rays, spreadAngle, speed, cmpAngle = 0, color, spirality;
-var transition;
+var transition, background;
 var INTERVAL_TIME = 0.01;
+var RAINBOW_LENGTH = 0.5;
+var RAINBOWTIME_SPEED = 4.0;
 
 function init (matrix, settings) {
 	totalWidth = matrix.getWidth();
 	totalHeight = matrix.getHeight();
+	rays = settings.rays;
 	color = settings.color;
 	transition = settings.transition;
+	background = settings.background;
 
 	switch (settings.axis) {
 		case "center":
@@ -19,7 +23,6 @@ function init (matrix, settings) {
 			break;
 	}
 
-	rays = settings.rays;
 	switch (settings.spread) {
 		case "10°": spreadAngle = Math.PI / 18; break;
 		case "20°": spreadAngle = Math.PI / 9; break;
@@ -27,6 +30,7 @@ function init (matrix, settings) {
 		case "40°": spreadAngle = Math.PI / 4.5; break;
 		case "50°": spreadAngle = Math.PI / 3.6; break;
 		case "60°": spreadAngle = Math.PI / 3; break;
+		case "90°": spreadAngle = Math.PI / 2; break;
 	}
 
 	switch (settings.speed) {
@@ -56,12 +60,9 @@ function init (matrix, settings) {
 }
 
 // Get angle difference between closes ray and pixel
-function pixelRayDeltaAngle(x, y) {
+function pixelRayDeltaAngle(distance, x, y) {
 	var deltas = [];
 	var angle = Math.atan2(x - axis.x, -y + axis.y) + Math.PI;
-	var dx2 = (x - axis.x) * (x - axis.x);
-	var dy2 = (axis.y - y) * (axis.y - y);
-	var distance = Math.sqrt(dx2 + dy2);
 	var spiralOffset = spirality * distance;
 
 	for (var ray = 0; ray < rays; ray++) {
@@ -86,14 +87,33 @@ function pixelRayDeltaAngle(x, y) {
 function draw (matrix) {
 	matrix.clear();
 
-	var rgb = parseColor(color);
 	for (var x = 0; x < totalWidth; x++) {
 		for (var y = 0; y < totalHeight; y++) {
+			var dx2 = (x - axis.x) * (x - axis.x);
+			var dy2 = (axis.y - y) * (axis.y - y);
+			var distance = Math.sqrt(dx2 + dy2);
+
+			// Generate color scheme
+			var rgb = {};
+			if (color == "rainbow") {
+				rgb.red = (Math.sin(distance * RAINBOW_LENGTH + 0) + 1) * 127;
+				rgb.green = (Math.sin(distance * RAINBOW_LENGTH + 2) + 1) * 127;
+				rgb.blue = (Math.sin(distance * RAINBOW_LENGTH + 4) + 1) * 127;
+			} else if (color == "rainbowtime") {
+				rgb.red = (Math.sin(distance * RAINBOW_LENGTH
+					+ cmpAngle * RAINBOWTIME_SPEED + 0) + 1) * 127;
+				rgb.green = (Math.sin(distance * RAINBOW_LENGTH 					+ cmpAngle * RAINBOWTIME_SPEED + 2) + 1) * 127;
+				rgb.blue = (Math.sin(distance * RAINBOW_LENGTH 						+ cmpAngle * RAINBOWTIME_SPEED + 4) + 1) * 127;
+			} else {
+				rgb = parseColor(color);
+			}
+
+			// Draw rays depending on delta angle
 			if (transition == "none") {
-				if (pixelRayDeltaAngle(x, y) < spreadAngle / 2)
+				if (pixelRayDeltaAngle(distance, x, y) < spreadAngle / 2)
 					matrix.setPixelGlobal(x, y, rgb);
 			} else if (transition == "smooth") {
-				var delta = pixelRayDeltaAngle(x, y);
+				var delta = pixelRayDeltaAngle(distance, x, y);
 				var intensity = Math.max(1 - delta / spreadAngle * 2, 0);
 				var pixelcolor = {
 					red : Math.round(rgb.red * intensity),
@@ -122,9 +142,9 @@ module.exports = {
 		settings : {
 			axis : [ "bottomcenter", "center" ],
 			rays : [ 4, 1, 2, 3, 5, 6, 7, 8 ],
-			spread : [ "30°", "10°", "20°", "40°", "50°", "60°" ],
+			spread : [ "30°", "10°", "20°", "40°", "50°", "60°", "90°" ],
 			speed : [ "normal", "ambient", "slow", "fast", "superfast"],
-			color : ["white", "blue", "green", "red"],
+			color : [ "rainbow", "rainbowtime", "white", "blue", "green", "red" ],
 			spirality : [ "none", "smaller", "small", "normal", "high", "higher",
 				"highest" ],
 			transition : [ "none", "smooth" ]
