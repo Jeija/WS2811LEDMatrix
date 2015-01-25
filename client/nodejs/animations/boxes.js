@@ -1,8 +1,8 @@
 var INTERVAL_TIME = 0.01;
-var BOX_LIFETIME = 1;
+var BOX_LIFETIME = 4;
 
 var boxes = [];
-var interval, beat = 0, boxes_per_interval, totalWidth, totalHeight;
+var interval, beat = 0, boxes_per_interval, totalWidth, totalHeight, style;
 
 function Box(x, y, dx, dy) {
 	this.x = x;
@@ -22,48 +22,58 @@ function Box(x, y, dx, dy) {
 }
 
 Box.prototype.tick = function (dtime) {
+	this.color.red *= (1 - dtime * decay);
+	this.color.green *= (1 - dtime * decay);
+	this.color.blue *= (1 - dtime * decay);
+
 	this.age += dtime;
-	this.xsize += this.dx * dtime;
-	this.ysize += this.dy * dtime;
-	if (this.xsize > 10) this.xsize = 10;
-	if (this.ysize > 10) this.ysize = 10;
+	if (this.xsize < this.dx * 0.1) this.xsize += this.dx * dtime;
+	if (this.ysize < this.dy * 0.1) this.ysize += this.dy * dtime;
 
 	if (this.age > BOX_LIFETIME) return true;
 }
 
 Box.prototype.draw = function (matrix) {
-	// Top row
-	for (var x = this.x - this.xsize / 2; x <= this.x + this.xsize / 2; x++)
-			matrix.setPixelGlobal(Math.round(x),
-				Math.round(this.y - this.ysize / 2), this.color);
+	if (style == "empty") {
+		// Top row
+		for (var x = this.x - this.xsize / 2; x <= this.x + this.xsize / 2; x++)
+				matrix.setPixelGlobal(Math.round(x),
+					Math.round(this.y - this.ysize / 2), this.color);
 
-	// Bottom row
-	for (var x = this.x - this.xsize / 2; x <= this.x + this.xsize / 2; x++)
-			matrix.setPixelGlobal(Math.round(x),
-				Math.round(this.y + this.ysize / 2), this.color);
+		// Bottom row
+		for (var x = this.x - this.xsize / 2; x <= this.x + this.xsize / 2; x++)
+				matrix.setPixelGlobal(Math.round(x),
+					Math.round(this.y + this.ysize / 2), this.color);
 
-	// Left column
-	for (var y = this.y - this.ysize / 2; y < this.y + this.ysize / 2; y++)
-			matrix.setPixelGlobal(Math.round(this.x - this.xsize / 2),
-				Math.round(y), this.color);
+		// Left column
+		for (var y = this.y - this.ysize / 2; y < this.y + this.ysize / 2; y++)
+				matrix.setPixelGlobal(Math.round(this.x - this.xsize / 2),
+					Math.round(y), this.color);
 
 
-	// Right column
-	for (var y = this.y - this.ysize / 2; y < this.y + this.ysize / 2; y++)
-			matrix.setPixelGlobal(Math.round(this.x + this.xsize / 2),
-				Math.round(y), this.color);
+		// Right column
+		for (var y = this.y - this.ysize / 2; y < this.y + this.ysize / 2; y++)
+				matrix.setPixelGlobal(Math.round(this.x + this.xsize / 2),
+					Math.round(y), this.color);
+	} else if (style == "fill") {
+		for (var x = this.x - this.xsize / 2; x < this.x + this.xsize / 2; x++) {
+			for (var y = this.y - this.ysize / 2; y < this.y + this.ysize / 2; y++) {
+				matrix.setPixelGlobal(Math.round(x), Math.round(y), this.color);
+			}
+		}
+	}
 }
 
 function init (matrix, settings) {
 	totalHeight = matrix.getHeight();
 	totalWidth = matrix.getWidth();
+	style = settings.style;
 
 	switch (settings.decay) {
-		case "ultrafast":	decay = 0.1;	break;
-		case "fast":		decay = 0.05;	break;
-		case "normal":		decay = 0.03;	break;
-		case "slow":		decay = 0.015;	break;
-		default:		decay = 0.03;
+		case "ultrafast":	decay = 8;	break;
+		case "fast":		decay = 5;	break;
+		case "normal":		decay = 3;	break;
+		case "slow":		decay = 1;	break;
 	}
 
 	switch (settings.amount) {
@@ -80,16 +90,6 @@ function init (matrix, settings) {
 		for (var j = boxes.length - 1; j >= 0; j--) {
 			if (boxes[j].tick(INTERVAL_TIME)) boxes.splice(j, 1);
 		}
-
-		for (var i = 0; i <= boxes_per_interval; i++) {
-			if (Math.random() * 10 < beat) {
-				var x = Math.random() * totalWidth;
-				var y = Math.random() * totalHeight;
-				var dx = Math.random() * 30 + 45;
-				var dy = Math.random() * 30 + 45;
-				boxes.push(new Box(x, y, dx, dy));
-			}
-		}
 	}, INTERVAL_TIME * 1000);
 }
 
@@ -101,7 +101,15 @@ function draw (matrix) {
 }
 
 function event (ev) {
-	if (ev == "beat") beat = 1;
+	if (ev == "beat") {
+		for (var i = 0; i < boxes_per_interval; i++) {
+			var x = Math.random() * totalWidth;
+			var y = Math.random() * totalHeight;
+			var dx = Math.random() * 30 + 45;
+			var dy = Math.random() * 30 + 45;
+			boxes.push(new Box(x, y, dx, dy));
+		}
+	}
 }
 
 function terminate () {
@@ -112,8 +120,9 @@ module.exports = {
 	boxes : {
 		name : "Boxes",
 		settings : {
+			amount : [ "normal", "low", "high" ],
 			decay : [ "fast", "ultrafast", "normal", "slow" ],
-			amount : [ "normal", "low", "high" ]
+			style : [ "empty", "fill" ]
 		},
 		init : init,
 		draw : draw,
