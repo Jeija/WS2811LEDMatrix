@@ -1,11 +1,13 @@
 var parseColor = require("./parsecolor");
 var totalWidth, totalHeight, axis, interval, rays, spreadAngle, speed, cmpAngle = 0, color, spirality;
+var transition;
 var INTERVAL_TIME = 0.01;
 
 function init (matrix, settings) {
 	totalWidth = matrix.getWidth();
 	totalHeight = matrix.getHeight();
 	color = settings.color;
+	transition = settings.transition;
 
 	switch (settings.axis) {
 		case "center":
@@ -36,12 +38,13 @@ function init (matrix, settings) {
 	}
 
 	switch (settings.spirality) {
-		case "much": spirality = 0.01; break;
-		case "more": spirality = 0.02; break;
-		case "most": spirality = 0.05; break;
-		case "moster": spirality = 0.1; break;
-		case "mosterer": spirality = 0.2; break;
-		case "mostest": spirality = 0.4; break;
+		case "none": spirality = 0; break;
+		case "smaller": spirality = 0.01; break;
+		case "small": spirality = 0.02; break;
+		case "normal": spirality = 0.05; break;
+		case "high": spirality = 0.1; break;
+		case "higher": spirality = 0.2; break;
+		case "highest": spirality = 0.4; break;
 	}
 
 
@@ -52,7 +55,9 @@ function init (matrix, settings) {
 	}, INTERVAL_TIME * 1000);
 }
 
-function pixelOnRay(x, y) {
+// Get angle difference between closes ray and pixel
+function pixelRayDeltaAngle(x, y) {
+	var deltas = [];
 	var angle = Math.atan2(x - axis.x, -y + axis.y) + Math.PI;
 	var dx2 = (x - axis.x) * (x - axis.x);
 	var dy2 = (axis.y - y) * (axis.y - y);
@@ -65,11 +70,17 @@ function pixelOnRay(x, y) {
 		// Look 3 rounds back and ahead
 		for (var i = -3; i < 3; i++) {
 			var roundAngle = i * 2 * Math.PI;
-			if ((angle < cmpAngle + offsetAngle + spreadAngle - spiralOffset + roundAngle)
-				&& (angle > cmpAngle + offsetAngle - spiralOffset + roundAngle))
-					return true;
+			deltas.push(Math.abs(angle - cmpAngle - offsetAngle - spreadAngle
+				+ spiralOffset - roundAngle));
 		}
 	}
+
+	// Find the ray with the smallest delta angle
+	var mindelta = null;
+	for (var d in deltas) {
+		if (mindelta === null || deltas[d] < mindelta) mindelta = deltas[d];
+	}
+	return mindelta;
 }
 
 function draw (matrix) {
@@ -78,7 +89,19 @@ function draw (matrix) {
 	var rgb = parseColor(color);
 	for (var x = 0; x < totalWidth; x++) {
 		for (var y = 0; y < totalHeight; y++) {
-			if (pixelOnRay(x, y)) matrix.setPixelGlobal(x, y, rgb);
+			if (transition == "none") {
+				if (pixelRayDeltaAngle(x, y) < spreadAngle / 2)
+					matrix.setPixelGlobal(x, y, rgb);
+			} else if (transition == "smooth") {
+				var delta = pixelRayDeltaAngle(x, y);
+				var intensity = Math.max(1 - delta / spreadAngle * 2, 0);
+				var pixelcolor = {
+					red : Math.round(rgb.red * intensity),
+					green : Math.round(rgb.green * intensity),
+					blue : Math.round(rgb.blue * intensity),
+				};
+				matrix.setPixelGlobal(x, y, pixelcolor);
+			}
 		}
 	}
 }
@@ -92,17 +115,19 @@ function terminate () {
 
 module.exports = {
 	spiral : {
-		name : "Spiral",
+		name : "Rotation / Spiral",
 		init : init,
 		draw : draw,
 		event : event,
 		settings : {
 			axis : [ "bottomcenter", "center" ],
 			rays : [ 4, 1, 2, 3, 5, 6, 7, 8 ],
-			spread : [ "10°", "20°", "30°", "40°", "50°", "60°" ],
+			spread : [ "30°", "10°", "20°", "40°", "50°", "60°" ],
 			speed : [ "normal", "ambient", "slow", "fast", "superfast"],
 			color : ["white", "blue", "green", "red"],
-			spirality : ["much", "more", "most", "moster", "mosterer", "mostest"],
+			spirality : [ "none", "smaller", "small", "normal", "high", "higher",
+				"highest" ],
+			transition : [ "none", "smooth" ]
 		},
 		terminate : terminate,
 		description : "TODO"
