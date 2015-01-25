@@ -1,9 +1,10 @@
 var parseColor = require("./parsecolor");
 var totalWidth, totalHeight, axis, interval, rays, spreadAngle, speed, cmpAngle = 0, color, spirality;
-var transition, background;
+var transition, background, beateffect, beat = 0, decay;
 var INTERVAL_TIME = 0.01;
 var RAINBOW_LENGTH = 0.5;
 var RAINBOWTIME_SPEED = 4.0;
+var BEAT_ANGLE_INC = 2 * Math.PI;
 
 function init (matrix, settings) {
 	totalWidth = matrix.getWidth();
@@ -12,6 +13,7 @@ function init (matrix, settings) {
 	color = settings.color;
 	transition = settings.transition;
 	background = settings.background;
+	beateffect = settings.beateffect;
 
 	switch (settings.axis) {
 		case "center":
@@ -31,6 +33,13 @@ function init (matrix, settings) {
 		case "50°": spreadAngle = Math.PI / 3.6; break;
 		case "60°": spreadAngle = Math.PI / 3; break;
 		case "90°": spreadAngle = Math.PI / 2; break;
+	}
+
+	switch (settings.decay) {
+		case "ultrafast":	decay = 0.05;	break;
+		case "fast":		decay = 0.03;	break;
+		case "normal":		decay = 0.015;	break;
+		case "slow":		decay = 0.005;	break;
 	}
 
 	switch (settings.speed) {
@@ -56,6 +65,11 @@ function init (matrix, settings) {
 	setInterval(function () {
 		cmpAngle += INTERVAL_TIME * Math.PI * speed;
 		if (cmpAngle > 2 * Math.PI) cmpAngle -= 2 * Math.PI;
+		if (beat > decay) beat -= decay;
+		else beat = 0;
+		if (beateffect == "speed") {
+			cmpAngle += INTERVAL_TIME * BEAT_ANGLE_INC * beat;
+		}
 	}, INTERVAL_TIME * 1000);
 }
 
@@ -109,24 +123,31 @@ function draw (matrix) {
 			}
 
 			// Draw rays depending on delta angle
+			var intensity = 1;
 			if (transition == "none") {
-				if (pixelRayDeltaAngle(distance, x, y) < spreadAngle / 2)
-					matrix.setPixelGlobal(x, y, rgb);
+				if (!(pixelRayDeltaAngle(distance, x, y) < spreadAngle / 2))
+					intensity = 0;
 			} else if (transition == "smooth") {
 				var delta = pixelRayDeltaAngle(distance, x, y);
-				var intensity = Math.max(1 - delta / spreadAngle * 2, 0);
-				var pixelcolor = {
-					red : Math.round(rgb.red * intensity),
-					green : Math.round(rgb.green * intensity),
-					blue : Math.round(rgb.blue * intensity),
-				};
-				matrix.setPixelGlobal(x, y, pixelcolor);
+				intensity = Math.max(1 - delta / spreadAngle * 2, 0);
 			}
+
+			// Parse beateffect setting
+			if (beateffect == "brightness") {
+				intensity *= beat;
+			}
+
+
+			rgb.red *= intensity;
+			rgb.green *= intensity;
+			rgb.blue *= intensity;
+			matrix.setPixelGlobal(x, y, rgb);
 		}
 	}
 }
 
 function event (ev) {
+	if (ev == "beat") beat = 1;
 }
 
 function terminate () {
@@ -147,7 +168,9 @@ module.exports = {
 			color : [ "rainbow", "rainbowtime", "white", "blue", "green", "red" ],
 			spirality : [ "none", "smaller", "small", "normal", "high", "higher",
 				"highest" ],
-			transition : [ "none", "smooth" ]
+			beateffect : [ "none", "brightness", "speed" ],
+			transition : [ "none", "smooth" ],
+			decay : [ "normal", "ultrafast", "fast", "slow" ]
 		},
 		terminate : terminate,
 		description : "TODO"
