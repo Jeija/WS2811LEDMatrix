@@ -71,11 +71,11 @@ $(function() {
 
 	// Send animation events, such as rhythm
 	$(document).keypress(function(e) {
+		if (!e.key) e.key = String.fromCharCode(e.charCode);
 		if (e.key) socket.emit("event", { type : "keypress", data : e.key });
 
 		if (e.key == "n") {
 			socket.emit("next_animation");
-			update_next_anim();
 		}
 
 		if (e.key == "a" || e.key == "s" || e.key == "d" || e.key == "f") {
