@@ -45,6 +45,15 @@ select:-moz-focusring {
 	width:80px;
 }
 
+input[type="text"].setting {
+	border:none;
+	background:#444;
+	width:92%;
+	padding:10px 12px;
+	font-size:16px;
+	color:#fff;
+}
+
 #nextanim {
 	margin-bottom:10px;
 }

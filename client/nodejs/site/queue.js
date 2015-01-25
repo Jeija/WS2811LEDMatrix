@@ -9,8 +9,8 @@ function render_settings(name, presets) {
 		var settingItem = $("<i>invalid setting</i>");
 		var settingType = anim.settings[setting];
 		if (typeof settingType == "string") {
-			settingItem = $('<input type="text" class="setting">')
-				.data("setting", setting);
+			settingItem = $('<input type="text" class="setting" value="'
+				+ settingType + '">').data("setting", setting);
 		} else if (Array.isArray(settingType)) {
 			settingItem = $('<select class="setting">').data("setting", setting);
 			for (var i in settingType) {

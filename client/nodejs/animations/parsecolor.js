@@ -5,6 +5,7 @@ module.exports = function (colorstring) {
 		case "red":	return { red : 255, green :   0, blue : 0   };
 		case "green":	return { red :   0, green : 255, blue : 0   };
 		case "blue":	return { red :   0, green :   0, blue : 255 };
+		case "black":	return { red :   0, green :   0, blue :   0 };
 		default:	return { red :   0, green :   0, blue :   0 };
 	}
 };

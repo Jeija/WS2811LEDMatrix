@@ -105,6 +105,7 @@ function draw (matrix) {
 }
 
 function event (ev, data) {
+	if (ev == "beat") beat = 1;
 }
 
 function terminate () {
