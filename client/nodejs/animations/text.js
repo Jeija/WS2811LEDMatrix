@@ -10,9 +10,10 @@ var FONT_OFFSET_Y = 12;
 var INTERVAL_TIME = 0.01;
 var IO_SLIDESPEED_INC = 10;
 var fontpixels, color, background, totalWidth, totalHeight, beateffect, slidespeed, interval;
-var slideOffset, beat = 0, decay = 0, text = "", io_slidespeed = 0;
+var slideOffset, beat = 0, decay = 0, text = "", io_slidespeed;
 
 function init (matrix, settings) {
+	io_slidespeed = 0;
 	slideOffset = 0;
 	text = settings.text;
 	color = settings.color;

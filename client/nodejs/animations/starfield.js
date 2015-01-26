@@ -1,5 +1,5 @@
 var parseColor = require("./parsecolor");
-var beat, interval, decay, starSpeed, friction, stars_per_interval, time = 0;
+var beat, interval, decay, starSpeed, friction, stars_per_interval, time = 0, stars;
 
 var INTERVAL_TIME = 0.01;	// seconds
 var STAR_LIFETIME = 3;		// seconds
@@ -55,9 +55,8 @@ Star.prototype.draw = function (matrix) {
 	matrix.setPixelGlobal(Math.round(this.pos.x), Math.round(this.pos.y), col);
 };
 
-var stars = [];
-
 function init (matrix, settings) {
+	stars = [];
 	var totalWidth = matrix.getWidth();
 	var totalHeight = matrix.getHeight();
 
