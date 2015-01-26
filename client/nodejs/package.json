@@ -12,6 +12,7 @@
     "express": "^4.11.0",
     "frequencyjs": "0.0.3",
     "get-pixels": "^3.1.0",
+    "parse-color": "^1.0.0",
     "simplex-noise": "^2.1.1",
     "socket.io": "^1.2.1"
   }
