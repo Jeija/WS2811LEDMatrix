@@ -8,7 +8,6 @@ var FIELD_HEIGHT = 10;
 var PADDLE_HEIGHT = 6;
 var BALL_SPEED_X = 10;
 var BALL_SPEED_Y = 14;
-var interval, ballx, bally, balldir;
 var POINTS1_X = 3;
 var POINTS1_Y = 2;
 var POINTS2_X = 33;
@@ -18,6 +17,7 @@ var POINTS_TO_WIN = 10;
 var WIN_COLOR = parseColor("green");
 var LOSE_COLOR = parseColor("red");
 
+var interval, ballx, bally, balldir, ballcolor;
 var player1_points = 0;
 var player2_points = 0;
 var paddle1y = FIELD_HEIGHT / 2;
@@ -44,6 +44,8 @@ function reset_game () {
 }
 
 function init (matrix, settings) {
+	ballcolor = settings.ballcolor;
+
 	player1_points = 0;
 	player2_points = 0;
 	winner = 0;
@@ -147,10 +149,19 @@ function draw (matrix) {
 			var y2 = (yround - bally_global) * (yround - bally_global);
 			var distance = Math.sqrt(x2 + y2);
 			var intensity = Math.max(0, (1 - distance * distance * distance / 1.1));
-			var red = Math.round(255 * intensity);
-			var green = Math.round(255 * intensity);
-			var blue = Math.round(255 * intensity);
-			var rgb = { red : red, green : green, blue : blue };
+
+			// Determine color of ball
+			var rgb = {};
+			if (ballcolor == "rainbow") {
+				rgb.red = Math.round((Math.sin(5 * matchtime + 0) + 1) * 127);
+				rgb.green = Math.round((Math.sin(5 * matchtime + 2) + 1) * 127);
+				rgb.blue = Math.round((Math.sin(5 * matchtime + 4) + 1) * 127);
+			} else {
+				rgb = parseColor(ballcolor);
+			}
+			rgb.red *= intensity;
+			rgb.green *= intensity;
+			rgb.blue *= intensity;
 			matrix.setPixelGlobal(Math.round(x), Math.round(y), rgb);
 		}
 	}
@@ -214,6 +225,9 @@ module.exports = {
 		name : "Pong",
 		init : init,
 		draw : draw,
+		settings : {
+			ballcolor : "rainbow"
+		},
 		event : event,
 		terminate : terminate,
 		description : "Player 1: W/S, Player 2: UpDown"
