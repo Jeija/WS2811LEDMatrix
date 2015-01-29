@@ -23,12 +23,15 @@ $(function() {
 	preview.canvas.width = preview_w;
 	preview.canvas.height = preview_h;
 
-	$(window).resize(function () {
+	var update_width = function () {
 		preview_w = $("#preview").width();
 		preview_h = $("#preview").height();
-		preview.canvas.width = preview_w;
-		preview.canvas.height = preview_h;
-	});
+		if (preview.canvas.width != preview_w) preview.canvas.width = preview_w;
+		if (preview.canvas.height != preview_h) preview.canvas.height = preview_h;
+	};
+
+	$(window).resize(update_width);
+	setInterval(update_width, 100);
 
 	preview.fillStyle = "#000";
 	preview.fillRect(0, 0, preview_w, preview_h);
