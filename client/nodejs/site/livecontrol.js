@@ -1,6 +1,10 @@
 var socket = io();
 var animations = {};
 
+// $(document).keypress gets "Left", "Right", "Up", "Down" keypresses (e.g. firefox)
+// --> don't manually generate them
+var RECEIVES_ARROW_KEYPRESS = false;
+
 $(function() {
 	// Update next animation whenever it changes
 	socket.on("sync_queue", function (queue) {
@@ -69,9 +73,22 @@ $(function() {
 		});
 	}, 20);
 
+	// Chromium: Send arrow keys
+	$(document).keydown(function(e) {
+		if (RECEIVES_ARROW_KEYPRESS) return;
+		var key = null;
+		if(e.keyCode == 37) key = "Left";
+		if(e.keyCode == 38) key = "Up";
+		if(e.keyCode == 39) key = "Right";
+		if(e.keyCode == 40) key = "Down";
+		if (key) socket.emit("event", { type : "keypress", data : key });
+	});
+
 	// Send animation events, such as rhythm
 	$(document).keypress(function(e) {
 		if (!e.key) e.key = String.fromCharCode(e.charCode);
+		if (e.key == "Up" || e.key == "Down" || e.key == "Left" || e.key == "Right")
+			RECEIVES_ARROW_KEYPRESS = true;
 		if (e.key) socket.emit("event", { type : "keypress", data : e.key });
 
 		if (e.key == "n") {
