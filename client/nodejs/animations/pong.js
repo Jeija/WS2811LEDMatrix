@@ -199,9 +199,9 @@ function event (ev, key) {
 
 	// Make sure paddles stay inside the viewing range
 	var halfheight = (PADDLE_HEIGHT - paddle_size_dec) / 2;
-	if (paddle1y - halfheight < 0) paddle1y = PADDLE_HEIGHT / 2;
+	if (paddle1y - halfheight + 0.5 < 0) paddle1y = PADDLE_HEIGHT / 2;
 	if (paddle1y + halfheight > FIELD_HEIGHT) paddle1y = FIELD_HEIGHT - PADDLE_HEIGHT / 2;
-	if (paddle2y - halfheight < 0) paddle2y = PADDLE_HEIGHT / 2;
+	if (paddle2y - halfheight + 0.5 < 0) paddle2y = PADDLE_HEIGHT / 2;
 	if (paddle2y + halfheight > FIELD_HEIGHT) paddle2y = FIELD_HEIGHT - PADDLE_HEIGHT / 2;
 }
 
