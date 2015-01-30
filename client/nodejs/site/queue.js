@@ -104,6 +104,9 @@ $(function() {
 			var anim = res[name];
 			$("<option/>").val(name).text(anim.name).appendTo("#nextanim");
 		}
+
+		var anim = $("#nextanim").val();
+		render_settings(anim);
 	});
 
 	// Selected another animation --> update settings

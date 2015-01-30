@@ -2,7 +2,7 @@ var INTERVAL_TIME = 0.01;
 var BOX_LIFETIME = 4;
 
 var boxes = [];
-var interval, beat = 0, boxes_per_interval, totalWidth, totalHeight, style;
+var interval, beat = 0, boxes_per_interval, totalWidth, totalHeight, style, decay;
 
 function Box(x, y, dx, dy) {
 	this.x = x;
