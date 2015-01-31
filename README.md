@@ -14,8 +14,6 @@ Make sure to arrange the LEDs and the matrices as configured in `client/config/l
 
 ## Flash the Firmware
 You can either just flash the prebuilt firmware in `firmware/build/main.hex` onto the ATMega16 and accept the following default values:
-* IP Address: 192.168.0.91
-* MAC Address: 4c:45:4d:41:54:52
 * LED Matrix Protocol UDP Port: 2711
 * Number of LEDs per controller board: 100
 * Maximum ethernet packet size: 400 bytes
@@ -24,6 +22,16 @@ You can either just flash the prebuilt firmware in `firmware/build/main.hex` ont
 * `make` to compile the firmware
 * `make flash` to flash the firmware to the microcontroller, make sure to adjust your programmer settings in the Makefile
 * `make clean` to remove unnecessary files
+
+By default, the firmware for the bottom right LED Matrix (in the constellation as preset in the node.js client) is flashed. The firmwares differ in their MAC and IP address. You can change this behaviour by defining which firmware you are flashing yourself:
+
+`make flash MATRIXCONF=MATRIX_TOPLEFT`
+
+Where available matrix names are:
+* MATRIX_TOPLEFT (192.168.0.90)
+* MATRIX_LEFT (192.168.0.91)
+* MATRIX_RIGHT (192.168.0.92)
+* MATRIX_TOPRIGHT (192.168.0.93)
 
 You should then be able to `ping` and `arping` your board when connected to the LAN.
 

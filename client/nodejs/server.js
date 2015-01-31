@@ -28,7 +28,7 @@ var matrix = new MultiMatrix({
 		yoffset : 10
 	},
 	right : {
-		ip : "192.168.0.80",
+		ip : "192.168.0.92",
 		port : 2711,
 		lookup_file : "lookup.csv",
 		xoffset : 20,
