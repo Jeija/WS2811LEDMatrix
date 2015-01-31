@@ -56,6 +56,11 @@ function draw (matrix) {
 					green : Math.min(255, images[img].get(x, y, 1) + trCol.green),
 					blue : Math.min(255, images[img].get(x, y, 2) + trCol.blue)
 				};
+
+				// Simple gamma correction:
+				col.red = 255 * Math.pow(col.red/255, 1/0.45);
+				col.green = 255 * Math.pow(col.green/255, 1/0.45);
+				col.blue = 255 * Math.pow(col.blue/255, 1/0.45);
 				matrix.setPixelMatrix(matrices[mtx], x, y, col);
 			}
 		}
