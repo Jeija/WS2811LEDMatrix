@@ -8,7 +8,7 @@ var animation_active = null;
 var shortcuts = JSON.parse(fs.readFileSync(path.join(__dirname, "shortcuts.json")));
 
 fs.readdirSync(__dirname).forEach(function (fn) {
-	if (fn != "index.js" && fn != "shortcuts.json") {
+	if (fn != "index.js" && fn.substr(fn.length - 3) == ".js") {
 		var mods = require(path.join(__dirname, fn));
 		for (var name in mods) {
 			animations[name] = mods[name];
