@@ -66,7 +66,7 @@ function init (matrix, settings) {
 		if (bally > FIELD_HEIGHT - 0.5) balldir.y = -1;
 
 		// Left paddle reflection:
-		if (ballx < 1) {
+		if (ballx < 1.3) {
 			if (bally > paddle1y - PADDLE_HEIGHT / 2 - 0.5
 				&& bally < paddle1y + PADDLE_HEIGHT / 2 + 0.5) {
 				balldir.x = 1;
