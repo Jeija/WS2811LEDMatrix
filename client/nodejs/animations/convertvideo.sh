@@ -2,8 +2,9 @@
 # This script converts a video so that the video animation can play it, using ffmpeg
 
 set -e
-if ( [ -n "$1"] || [ -n "$2" ] ); then
+if ( ! [ $# -eq 2 ] ); then
 	echo "Usage: convertvideo.sh <inputvideo> <outputdir>"
+	exit 1
 fi
 mkdir -p "$2"
 
