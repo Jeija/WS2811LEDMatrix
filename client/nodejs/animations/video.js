@@ -93,10 +93,10 @@ function init (matrix, settings) {
 	var i = 0;
 	loadingInterval = setInterval(function () {
 		for (var j = 0; j <= MAX_OPEN_FILES; j++) {
-			open_files++;
 			if (open_files > MAX_OPEN_FILES) return;
 			if (!imgfiles[i]) return;
 
+			open_files++;
 			getPixels(path.join(url, imgfiles[i++]), function (err, pixels) {
 				open_files--;
 				if (err) console.log(err);
