@@ -32,6 +32,7 @@ Where available matrix names are:
 * MATRIX_LEFT (192.168.0.91)
 * MATRIX_RIGHT (192.168.0.92)
 * MATRIX_TOPRIGHT (192.168.0.93)
+* MATRIX_SPECIAL (192.168.0.80)
 
 You should then be able to `ping` and `arping` your board when connected to the LAN.
 

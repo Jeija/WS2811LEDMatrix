@@ -27,6 +27,9 @@
 #elif defined(MATRIX_TOPRIGHT)
 	uint8_t mac[6] = {0x4c, 0x45, 0x4d, 0x48, 0x54, 0x04};
 	uint8_t ip[4] = {192, 168, 0, 93};
+#elif defined(MATRIX_SPECIAL)
+	uint8_t mac[6] = {0x4c, 0x45, 0x4d, 0xa0, 0x55, 0x18};
+	uint8_t ip[4] = {192, 168, 0, 80};
 #endif
 
 #if F_CPU != 16000000
