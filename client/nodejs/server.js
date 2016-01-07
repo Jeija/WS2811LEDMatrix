@@ -77,8 +77,8 @@ io.on("connection", function (socket) {
 		if (animqueue.length > 0) {
 			var na = animqueue.shift();
 			anim.setAnimation(na.animation, na.settings);
-			io.sockets.emit("sync_queue", animqueue);
 		}
+		io.sockets.emit("sync_queue", animqueue);
 	});
 
 	socket.on("get_preview", function (_, fn) {

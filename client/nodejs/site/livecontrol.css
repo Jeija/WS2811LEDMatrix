@@ -3,6 +3,7 @@ body {
 	padding:0;
 	background:#000;
 	color:#fff;
+	font-family:Cantarell, Helvetica, Arial;
 }
 
 h1 {
@@ -11,18 +12,19 @@ h1 {
 
 #preview {
 	position:absolute;
-	height:85vh;
-	width:62vw;
+	height:80vh;
+	width:60vw;
 	left:5vw;
-	top:80px;
+	top:5vh;
+	border:1px solid #00f;
 }
 
 #info {
 	position:absolute;
 	width:25vw;
 	right:5vw;
-	top:80px;
-	height:85vh;
+	top:5vh;
+	height:90vh;
 	border:1px solid #0a0;
 }
 
@@ -32,4 +34,56 @@ h1 {
 
 #next_container, #active_container {
 	font-size:2vw;
+}
+
+#recorder {
+	position:absolute;
+	height:5vh;
+	width:60vw;
+	left:5vw;
+	top:90vh;
+	border:1px solid #f00;
+}
+
+#record_indicator {
+	line-height:5vh;
+	width:8vw;
+	font-size:1.5vw;
+	text-align:center;
+	color:#aaa;
+	font-style:italic;
+	border-right:1px solid #f00;
+	display:inline-block;
+	float:left;
+}
+
+#record_indicator.recording {
+	font-weight:bold;
+	font-style:normal;
+	background:#a00;
+	color:#fff;
+}
+
+#record_timeline {
+	background:#444;
+	display:inline-block;
+	height:5vh;
+	width:calc(52vw - 1px);
+	position:relative;
+}
+
+.record_event {
+	line-height:5vh;
+	background:#aa0;
+	display:inline-block;
+	padding:0 0.3vw;
+	color:#000;
+	position:absolute;
+	font-weight:bold;
+}
+
+#record_iter {
+	height:5vh;
+	position:absolute;
+	border-right:3px solid #f00;
 }
