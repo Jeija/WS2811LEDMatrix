@@ -69,5 +69,25 @@
 			"speed": "80",
 			"tail": "5"
 		}
+	},
+	"8" : {
+		"name": "starfield",
+		"settings": {
+			"color": "random",
+			"decay": "ultrafast",
+			"starspeed": "ultrafast",
+			"friction": "ultrahigh",
+			"amount": "high",
+			"offset": "center"
+		}
+	},
+	"9" : {
+		"name": "pixelart",
+		"settings": {
+			"change": "everything",
+			"transition": "glow",
+			"transitionColor": "green",
+			"transitionDecay": "slow"
+		}
 	}
 }
