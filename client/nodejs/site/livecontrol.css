@@ -36,6 +36,47 @@ h1 {
 	font-size:2vw;
 }
 
+#connect {
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:25vw;
+	font-size:2.2vh;
+	border-top:1px solid #0f0;
+	height:7vh;
+	line-height:7vh;
+	background:#050;
+}
+
+#connect_server {
+	background:#000;
+	color:#fff;
+	text-align:center;
+	border:1px solid #fff;
+	margin-left:0.5vw;
+	font-size:2.2vh;
+	width:11vw;
+}
+
+#connect_settings {
+	margin-left:1vw;
+}
+
+#connect_status {
+	position:absolute;
+	font-size:4vh;
+	right:0;
+	top:0;
+	height:7vh;
+	width:7vh;
+	text-align:center;
+	background:#a00;
+	cursor:pointer;
+	color:#000;
+	-moz-user-select:none;
+	user-select:none;
+}
+
 #recorder {
 	position:absolute;
 	height:5vh;

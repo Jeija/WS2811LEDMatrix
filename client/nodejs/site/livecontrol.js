@@ -3,6 +3,10 @@ var animations = {};
 
 var RECORDING_PLAYBACK_INTERVAL = 0.01;
 
+// Second server connection
+var second_connected = false;
+
+// Recording
 var recording = false;
 var recording_events = [];
 var recording_begin;
@@ -10,13 +14,31 @@ var recording_playback_begin;
 var recording_playback_lasttime;
 var recording_playback_interval;
 
+// Send event to both primary and secondary server
+function send_both(type, data) {
+	socket.emit("event", { type : type, data : data });
+
+	var url = "http://" + $("#connect_server").val() + "/event";
+	// Send GET request to second server
+	if (second_connected) {
+		$.ajax({
+			url : url,
+			type : "get",
+			data : {
+				type : encodeURIComponent(type),
+				data : encodeURIComponent(data)
+			}
+		});
+	}
+}
+
 // Send animation events, such as rhythm
 function send_key_event(key) {
 	if (key == "n") socket.emit("next_animation");
 	if (key == "a" || key == "s" || key == "d" || key == "f")
-			socket.emit("event", { type : "beat" });
+			send_both("beat");
 
-	socket.emit("event", { type : "keypress", data : key });
+	send_both("keypress", key);
 }
 
 // Get place of time on timeline as css style
@@ -108,6 +130,18 @@ function recording_playback() {
 	recording_playback_interval = setInterval(recording_playback_cb, RECORDING_PLAYBACK_INTERVAL * 1000);
 }
 
+// Enable / disable sending events to second server
+function connect_toggle() {
+	second_connected = !second_connected;
+	if (second_connected) {
+		$("#connect_status").css("background", "#0f0");
+		$("#connect_status").text("C");
+	} else {
+		$("#connect_status").css("background", "#a00");
+		$("#connect_status").text("D");
+	}
+}
+
 $(function() {
 	// Update next animation whenever it changes
 	socket.on("sync_queue", function (queue) {
@@ -179,6 +213,8 @@ $(function() {
 		});
 	}, 20);
 
+	$("#connect_status").click(connect_toggle);
+
 	// Keyboard controls
 	$(document).keypress(function(e) {
 		var key = e.key ? e.key : String.fromCharCode(e.charCode);
@@ -192,7 +228,9 @@ $(function() {
 		if (key == "r") recording_toggle();
 		recording_hook(key);
 		if (key == "p") recording_playback();
+		if (key == "#") connect_toggle();
 
+		// Send event to first and second server
 		send_key_event(key);
 	});
 });
