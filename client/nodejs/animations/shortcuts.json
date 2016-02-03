@@ -5,5 +5,69 @@
 			"color" : "white",
 			"decay" : "fast"
 		}
+	},
+	"2" : {
+		"name": "color",
+		"settings": {
+			"color": "rainbow",
+			"decay": "slow",
+			"beateffect": "bar"
+		}
+	},
+	"3" : {
+		"name" : "starfield",
+		"settings" : {
+			"color" : "rainbowtime",
+			"decay" : "fast",
+			"starspeed" : "fast",
+			"friction" : "low",
+			"amount" : "high",
+			"offset" : "bottomcenter"
+		}
+	},
+	"4" : {
+		"name" : "spiral",
+		"settings" : {
+			"axis" : "bottomcenter",
+			"rays" : 3,
+			"spread" : "90°",
+			"speed" : "ambient",
+			"color" : "rainbowtime",
+			"spirality" : "high",
+			"beateffect" : "speed",
+			"transition" : "smooth",
+			"decay" : "ultrafast"
+		}
+	},
+	"5" : {
+		"name": "waves",
+		"settings": {
+			"epicenter": "bottomcenter",
+			"wavelength": "short",
+			"wavespeed": "slow",
+			"color": "rainbowtime",
+			"colorspeed": "fast",
+			"beateffect": "time",
+			"decay": "normal"
+		}
+	},
+	"6" : {
+		"name": "text",
+		"settings": {
+			"color": "red",
+			"background": "green",
+			"beateffect": "slide",
+			"decay": "slow",
+			"slidespeed": "fast",
+			"text": "FASCHINGSPARTY"
+		}
+	},
+	"7" : {
+		"name": "nexus",
+		"settings": {
+			"amount": "100",
+			"speed": "80",
+			"tail": "5"
+		}
 	}
 }
