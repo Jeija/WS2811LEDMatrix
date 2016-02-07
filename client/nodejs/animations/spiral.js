@@ -62,7 +62,7 @@ function init (matrix, settings) {
 
 
  
-	setInterval(function () {
+	interval = setInterval(function () {
 		cmpAngle += INTERVAL_TIME * Math.PI * speed;
 		if (cmpAngle > 2 * Math.PI) cmpAngle -= 2 * Math.PI;
 		if (beat > decay) beat -= decay;
