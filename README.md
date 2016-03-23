@@ -1,4 +1,11 @@
 # WS2811 LED Matrix with ATMega16, Python and node.js Client
+See the LED Matrices (and some [LED Strips](https://github.com/Jeija/ESP8266-WS2811-LEDs)) in action in this video:
+[![Faschingsparty Thumbnail](http://img.youtube.com/vi/3oMDUkM88Io/0.jpg)](https://www.youtube.com/watch?v=3oMDUkM88Io)
+
+Screenshots of the node.js client:
+![Spiral](http://i.imgur.com/a1M53pQ.png)
+![Pixel Art](http://i.imgur.com/H7VRdes.png)
+
 Our setup consists of the following:
 * 4 LED matrix panels at the size of 0.5m * 0.5m and 10x10 pixels. That makes for 20x20 pixels and 1m x 1m display area in total. Also includes 8x 3A-PSUs at 5V to provide the total required maximum 120W. The panel uses [fairly cheap LED pixels from china](http://www.aliexpress.com/item/Diameter-12mm-500pcs-WS2811-LED-pixel-module-IP68-waterproof-DC5V-full-color-christmas-tree-decration/1234045959.html).
 * A controller PCB that translates frames sent to it from the client over LAN to signals for the LED matrix using simple bit-banging
